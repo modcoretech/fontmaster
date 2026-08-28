@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fontmaster</title>
+  <link rel="stylesheet" href="popup.css">
+  <base target="_blank">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Modal Dialog System -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-title" class="modal-title">Notice</h3>
+        <button id="modal-close-btn" class="modal-close" type="button" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="modal-body" class="modal-body"></div>
+      <div class="modal-footer">
+        <button id="modal-ok-btn" class="btn btn-primary" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main View -->
+  <div id="main-state" class="screen">
+
+    <header class="header">
+      <div class="wordmark-group">
+        <span class="wm-name">Fontmaster</span>
+        <div class="tooltip-wrapper">
+          <a href="https://patreon.com/cw/modcore" class="patreon-link" target="_blank" rel="noopener" aria-label="Support on Patreon">
+            <span class="patreon-icon"></span>
+          </a>
+          <span class="tooltip-content" role="tooltip">Support on Patreon</span>
+        </div>
+      </div>
+      <nav class="tab-nav" role="tablist" aria-label="Sections">
+        <button class="tab active" data-tab="font" role="tab" aria-selected="true" aria-controls="panel-font" id="tab-font" type="button">Font</button>
+        <button class="tab" data-tab="settings" role="tab" aria-selected="false" aria-controls="panel-settings" id="tab-settings" type="button">Settings</button>
+        <a href="https://sites.google.com/view/modcore-pricing/apps/fontmaster" class="tab tab-link" target="_blank" rel="noopener" aria-label="Help">Help</a>
+      </nav>
+    </header>
+
+    <!-- FONT PANEL -->
+    <div id="panel-font" class="panel active" role="tabpanel" aria-labelledby="tab-font">
+      <div class="panel-inner">
+
+        <div class="status-row" id="status-row" aria-live="polite">
+          <div class="status-dot" id="status-dot"></div>
+          <span class="status-text" id="status-text">No font active</span>
+          <label class="site-toggle-wrap hidden" id="site-toggle-wrap" title="Toggle font for this site">
+            <input type="checkbox" id="site-toggle" class="toggle-input" checked>
+            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          </label>
+        </div>
+
+        <div class="section">
+          <label class="section-label" id="label-font-source">Font Source</label>
+          <div class="pill-group" role="group" aria-labelledby="label-font-source">
+            <button class="pill active" data-source="google" aria-pressed="true" type="button">Google</button>
+            <button class="pill" data-source="bunny" aria-pressed="false" type="button">Bunny</button>
+            <button class="pill" data-source="local" id="local-source-btn" aria-pressed="false" type="button">Local</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <label class="section-label" for="font-input">Font Family</label>
+          <div class="input-wrap">
+            <input
+              id="font-input"
+              type="text"
+              class="font-input"
+              placeholder="Search fonts..."
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+              aria-autocomplete="list"
+              aria-controls="suggestions"
+              aria-expanded="false"
+            />
+            <button id="clear-btn" class="clear-btn hidden" aria-label="Clear search" type="button">&times;</button>
+          </div>
+          <div id="suggestions" class="suggestions hidden" role="listbox" aria-label="Font suggestions"></div>
+        </div>
+
+        <div class="section">
+          <label class="section-label">Preview</label>
+          <div class="preview-box" aria-live="polite">
+            <div id="preview-text" class="preview-text">The quick brown fox jumps over the lazy dog</div>
+            <div id="preview-meta" class="preview-meta">Select a font to preview</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <label class="section-label">Typography</label>
+            <button id="typo-toggle" class="section-toggle" type="button" aria-expanded="true" aria-label="Toggle typography controls">&minus;</button>
+          </div>
+          <div id="typo-body" class="typo-body">
+            <div class="slider-row">
+              <label class="slider-label" for="letter-spacing">Letter spacing</label>
+              <span class="slider-value" id="ls-val">0px</span>
+              <input type="range" id="letter-spacing" class="slider" min="-2" max="4" step="0.1" value="0" />
+            </div>
+            <div class="slider-row">
+              <label class="slider-label" for="line-height">Line height</label>
+              <span class="slider-value" id="lh-val">1.5</span>
+              <input type="range" id="line-height" class="slider" min="1" max="2.5" step="0.05" value="1.5" />
+            </div>
+            <div class="slider-row">
+              <label class="slider-label" for="font-size">Font size</label>
+              <span class="slider-value" id="fs-val">16px</span>
+              <input type="range" id="font-size" class="slider" min="12" max="24" step="1" value="16" />
+            </div>
+            <div class="slider-row">
+              <label class="slider-label" for="font-weight-slider">Target Weight</label>
+              <span class="slider-value" id="fw-val">400</span>
+              <input type="range" id="font-weight-slider" class="slider" min="100" max="900" step="100" value="400" />
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <label class="section-label">Weights <span id="weights-count" class="count-badge">0</span></label>
+          </div>
+          <div class="chip-group" id="weight-chips" role="group" aria-label="Font weights"></div>
+        </div>
+
+        <div class="section actions-section">
+          <button id="apply-btn" class="btn btn-primary" type="button">
+            <span class="btn-label">Apply Font</span>
+            <span class="spinner hidden" aria-hidden="true"></span>
+          </button>
+          <button id="remove-btn" class="btn btn-danger hidden" type="button">Remove Font</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SETTINGS PANEL -->
+    <div id="panel-settings" class="panel hidden" role="tabpanel" aria-labelledby="tab-settings">
+      <div class="settings-scroll">
+
+        <section class="settings-section">
+          <h3 class="section-heading">Appearance</h3>
+          <label class="toggle-row" for="theme-select">
+            <span class="toggle-label">Theme</span>
+            <select id="theme-select" class="select-input">
+              <option value="auto">System</option>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3 class="section-heading">Performance</h3>
+          <label class="toggle-row" for="fast-rendering">
+            <span class="toggle-label">Fast rendering <small>font-display: swap</small></span>
+            <input type="checkbox" id="fast-rendering" class="toggle-input">
+            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3 class="section-heading">Compatibility</h3>
+          <label class="toggle-row" for="protect-monospace">
+            <span class="toggle-label">Protect monospace fonts <small>Preserve code & terminal fonts</small></span>
+            <input type="checkbox" id="protect-monospace" class="toggle-input" checked>
+            <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          </label>
+        </section>
+
+        <section class="settings-section">
+          <h3 class="section-heading">Data</h3>
+          <div class="data-row">
+            <button id="export-btn" class="btn btn-secondary" type="button">Export</button>
+            <button id="import-btn" class="btn btn-secondary" type="button">Import</button>
+            <button id="reset-btn" class="btn btn-danger" type="button">Reset</button>
+          </div>
+          <input type="file" id="import-file" accept=".json" class="hidden" aria-label="Import settings file">
+        </section>
+
+        <section class="settings-section about-section">
+          <p class="about-name">Fontmaster <span class="about-ver" id="about-ver">v3.1</span></p>
+          <p class="about-desc">by <a href="https://github.com/modcoretech/fontmaster" class="about-link" target="_blank" rel="noopener">modcore</a></p>
+          <button id="github-btn" class="btn btn-secondary" type="button">Report issue</button>
+        </section>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="constants.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

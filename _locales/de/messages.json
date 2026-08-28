@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "Fontmaster",
+    "description": "Name der Erweiterung."
+  },
+  "extensionShortName": {
+    "message": "Fontmaster",
+    "description": "Kurzname der Erweiterung."
+  },
+  "extensionDescription": {
+    "message": "Mit Fontmaster, der Browsererweiterung von modcore, können Sie die Schriftart jeder beliebigen Webseite ändern",
+    "description": "Beschreibung der Erweiterung."
+  }
+}

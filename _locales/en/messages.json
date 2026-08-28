@@ -1,0 +1,14 @@
+{
+  "extensionName": {
+    "message": "Fontmaster",
+    "description": "Name of the extension."
+  },
+  "extensionShortName": {
+    "message": "Fontmaster",
+    "description": "Short name of the extension."
+  },
+  "extensionDescription": {
+    "message": "With Fontmaster, the browser extension from modcore, you can change the font of any website",
+    "description": "Description of the extension."
+  }
+}
